@@ -1,26 +1,30 @@
 class Todo {
-  constructor(data, selector, counter) {
+  constructor(data, selector, handleCheck, handleDelete) {
     this._data = data;
     this._selector = selector;
-    this._counter = counter;
+    this._handleCheck = handleCheck;
+    this._handleDelete = handleDelete;
   }
 
   _setEventListeners() {
+   
     this._todoDeleteBtn.addEventListener("click", () => {
-      if (this._data.completed) {
-        this._counter.updateCompleted(false);
-      }
-      this._counter.updateTotal(false);
-      this._todoElement.remove();
+      // if (this._data.completed) {
+      //   this._counter.updateCompleted(false);
+      // }
+      // this._counter.updateTotal(false);
+      // this._todoElement.remove();
+      this._handleDelete(this._todoElement, this._data.completed);
     });
 
     this._todoCheckboxEl.addEventListener("change", () => {
       this._data.completed = !this._data.completed;
-      if (this._data.completed) {
-        this._counter.updateCompleted(true);
-      } else {
-        this._counter.updateCompleted(false);
-      }
+      // if (this._data.completed) {
+      //   this._counter.updateCompleted(true);
+      // } else {
+      //   this._counter.updateCompleted(false);
+      // }
+      this._handleCheck(this._data);
     });
   }
 
@@ -56,6 +60,7 @@ class Todo {
       .querySelector(this._selector)
       .content.querySelector(".todo")
       .cloneNode(true);
+
     const todoNameEl = this._todoElement.querySelector(".todo__name");
 
     this._todoDeleteBtn = this._todoElement.querySelector(".todo__delete-btn");

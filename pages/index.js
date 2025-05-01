@@ -16,21 +16,19 @@ const todosList = document.querySelector(".todos__list");
 
 const todoCounter = new TodoCounter(initialTodos, ".counter__text");
 
-//const popupWithForm = new PopupWithForm({
-// popupSelector: "#add-todo-popup",
-// handleFormSubmit: () => {},
-//});
 const popupWithForm = new PopupWithForm({
   popupSelector: "#add-todo-popup",
   handleFormSubmit: (inputData) => {
     const date = new Date(inputData.date);
     date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
 
-    const todo = {
+    const values = {
       name: inputData.name,
       date,
       id: uuidv4(),
     };
+
+    const todo = generateTodo(values);
 
     section.addItem(todo);
     todoCounter.updateTotal(true);
@@ -39,6 +37,22 @@ const popupWithForm = new PopupWithForm({
   },
 });
 popupWithForm.setEventListeners();
+
+const handleDelete = (element, completed) => {
+  if (completed) {
+    todoCounter.updateCompleted(false);
+  }
+  todoCounter.updateTotal(false);
+  element.remove();
+};
+
+const handleCheck = (data) => {
+  if (data.completed) {
+    todoCounter.updateCompleted(true);
+  } else {
+    todoCounter.updateCompleted(false);
+  }
+};
 
 //const openModal = (modal) => {
 //modal.classList.add("popup_visible");
@@ -50,7 +64,7 @@ popupWithForm.setEventListeners();
 
 // The logic in this function should all be handled in the Todo class.
 const generateTodo = (data) => {
-  const todo = new Todo(data, "#todo-template", todoCounter);
+  const todo = new Todo(data, "#todo-template", handleCheck, handleDelete);
   const todoElement = todo.getView();
 
   return todoElement;

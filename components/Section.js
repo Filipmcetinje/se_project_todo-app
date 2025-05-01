@@ -10,8 +10,7 @@ class Section {
     });
   }
   addItem(item) {
-    this._items.push(item);
-    this._renderer(item);
+    this._container.append(item);
   }
 }
 export default Section;
